@@ -36,4 +36,20 @@ public class PaperTest {
         boolean result = paper1.win(paper2);
         assertFalse(result);
     }
+
+    @Test
+    void testWinAgainstSpock() {
+        Paper paper = new Paper();
+        Spock spock = new Spock();
+        boolean result = paper.win(spock);
+        assertTrue(result);
+    }
+
+    @Test
+    void testWinAgainstNull() {
+        Paper paper = new Paper();
+        boolean result = paper.win(null);
+        assertFalse(result);
+    }
+
 }

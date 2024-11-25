@@ -17,23 +17,40 @@ public class RockTest {
     void testWinAgainstScissors() {
         Rock rock = new Rock();
         Scissors scissors = new Scissors();
-        boolean result = rock.win(scissors);
-        assertTrue(result);
+        assertTrue(rock.win(scissors));
+    }
+
+    @Test
+    void testWinAgainstLizard() {
+        Rock rock = new Rock();
+        Lizard lizard = new Lizard();
+        assertTrue(rock.win(lizard));
     }
 
     @Test
     void testLoseAgainstPaper() {
         Rock rock = new Rock();
         Paper paper = new Paper();
-        boolean result = rock.win(paper);
-        assertFalse(result);
+        assertFalse(rock.win(paper));
+    }
+
+    @Test
+    void testLoseAgainstSpock() {
+        Rock rock = new Rock();
+        Spock spock = new Spock();
+        assertFalse(rock.win(spock));
     }
 
     @Test
     void testTieAgainstRock() {
         Rock rock1 = new Rock();
         Rock rock2 = new Rock();
-        boolean result = rock1.win(rock2);
-        assertFalse(result);
+        assertFalse(rock1.win(rock2));
+    }
+
+    @Test
+    void testWinAgainstNull() {
+        Rock rock = new Rock();
+        assertFalse(rock.win(null));
     }
 }

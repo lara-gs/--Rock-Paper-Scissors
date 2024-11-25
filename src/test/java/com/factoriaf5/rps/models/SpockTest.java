@@ -47,4 +47,11 @@ public class SpockTest {
         Spock spock2 = new Spock();
         assertFalse(spock1.win(spock2));
     }
+
+    @Test
+    public void testWinAgainstNull() {
+        Spock spock = new Spock();
+        assertFalse(spock.win(null));
+    }
+
 }
