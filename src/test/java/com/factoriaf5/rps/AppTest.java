@@ -92,8 +92,6 @@ public class AppTest {
 
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
-
-        // Ejecutamos el juego
         App.play(new Scanner(System.in));
         String output = outContent.toString();
         assertTrue(output.contains("Wrong choice, pick another to play"));
@@ -128,7 +126,7 @@ public class AppTest {
 
     @Test
     public void testPlayGameComputerWins() {
-        String userInput = "1\n"; // Usuario selecciona Rock
+        String userInput = "1\n"; 
         ByteArrayInputStream in = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(in);
 
@@ -136,7 +134,7 @@ public class AppTest {
         System.setOut(new PrintStream(outContent));
 
         Move userMove = new Rock();
-        Move computerMove = new Paper(); // La computadora gana
+        Move computerMove = new Paper();
 
         System.out.println("Your play is: " + userMove.getName());
         System.out.println("The computer choice is " + computerMove.getName());
@@ -186,7 +184,7 @@ public class AppTest {
 
     @Test
 public void testPlayGameHandlesNullMove() {
-    String userInput = "6\n"; // Elección inválida que genera null
+    String userInput = "6\n"; 
     ByteArrayInputStream in = new ByteArrayInputStream(userInput.getBytes());
     System.setIn(in);
 
