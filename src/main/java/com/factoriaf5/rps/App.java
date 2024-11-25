@@ -3,9 +3,11 @@ package com.factoriaf5.rps;
 import java.util.Scanner;
 
 import com.factoriaf5.rps.application.Move;
+import com.factoriaf5.rps.models.Lizard;
 import com.factoriaf5.rps.models.Paper;
 import com.factoriaf5.rps.models.Rock;
 import com.factoriaf5.rps.models.Scissors;
+import com.factoriaf5.rps.models.Spock;
 
 public class App {
     public static Move getMove(int choice) {
@@ -16,6 +18,10 @@ public class App {
                 return new Paper();
             case 3:
                 return new Scissors();
+            case 4:
+                return new Lizard();
+            case 5:
+                return new Spock();
             default:
                 return null;
         }
@@ -27,7 +33,7 @@ public class App {
     }
 
     public static void play(Scanner scanner) {
-        System.out.println("Pick your choice: 1 for 'Rock', 2 for 'Paper', 3 for 'Scissors'");
+        System.out.println("Pick your choice: 1 for 'Rock', 2 for 'Paper', 3 for 'Scissors', 4 for 'Lizard', 5 for 'Spock'");
         int playerChoice = scanner.nextInt();
         Move userMove = getMove(playerChoice);
 

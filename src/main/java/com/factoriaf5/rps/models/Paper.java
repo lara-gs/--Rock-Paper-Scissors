@@ -11,7 +11,7 @@ public class Paper extends Move {
 
     @Override
     public boolean win(Move other) {
-        return other instanceof Rock;
+        return other instanceof Rock || other instanceof Spock;
     }
     
 }

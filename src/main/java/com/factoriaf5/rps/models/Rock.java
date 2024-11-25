@@ -10,7 +10,7 @@ public class Rock extends Move {
 
     @Override
     public boolean win(Move other) {
-        return other instanceof Scissors;
+        return other instanceof Scissors || other instanceof Lizard;
 
     }
 }
