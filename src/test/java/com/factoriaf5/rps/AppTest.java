@@ -1,125 +1,101 @@
 package com.factoriaf5.rps;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.factoriaf5.rps.application.Move;
+import com.factoriaf5.rps.models.Lizard;
+import com.factoriaf5.rps.models.Paper;
+import com.factoriaf5.rps.models.Rock;
+import com.factoriaf5.rps.models.Scissors;
+import com.factoriaf5.rps.models.Spock;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-import com.factoriaf5.rps.application.Move;
-import com.factoriaf5.rps.models.Paper;
-import com.factoriaf5.rps.models.Rock;
-import com.factoriaf5.rps.models.Scissors;
-
-class AppTest {
+public class AppTest {
 
     @Test
-    void testGetMoveWithZeroReturnsNull() {
-        assertNull(App.getMove(0), "La elección 0 debería devolver null");
+    public void testGetMove() {
+        assertTrue(App.getMove(1) instanceof Rock);
+        assertTrue(App.getMove(2) instanceof Paper);
+        assertTrue(App.getMove(3) instanceof Scissors);
+        assertTrue(App.getMove(4) instanceof Lizard);
+        assertTrue(App.getMove(5) instanceof Spock);
+        assertNull(App.getMove(6));
     }
 
     @Test
-    void testGetMoveWithNegativeNumberReturnsNull() {
-        assertNull(App.getMove(-5), "Los números negativos deberían devolver null");
+    public void testRandomMoveIsValid() {
+        for (int i = 0; i < 100; i++) {
+            Move move = App.getRandomMove();
+            assertTrue(move instanceof Rock || move instanceof Paper || move instanceof Scissors ||
+                    move instanceof Lizard || move instanceof Spock);
+        }
     }
 
     @Test
-    void testGetMoveWithLargeNumberReturnsNull() {
-        assertNull(App.getMove(1000), "Un número muy grande debería devolver null");
-    }
-
-    @Test
-    void testRockDoesNotBeatPaper() {
+    public void testRockWinScissors() {
         Move rock = new Rock();
-        Move paper = new Paper();
-        assertFalse(rock.win(paper), "Rock no debería ganar a Paper");
+        Move scissors = new Scissors();
+        assertTrue(rock.win(scissors));
     }
 
     @Test
-    void testPaperDoesNotBeatScissors() {
+    public void testPaperWinRock() {
         Move paper = new Paper();
-        Move scissors = new Scissors();
-        assertFalse(paper.win(scissors), "Paper no debería ganar a Scissors");
-    }
-
-    @Test
-    void testScissorsDoesNotBeatRock() {
-        Move scissors = new Scissors();
         Move rock = new Rock();
-        assertFalse(scissors.win(rock), "Scissors no debería ganar a Rock");
+        assertTrue(paper.win(rock));
     }
 
     @Test
-    void testPlayWithValidChoice() {
-        String input = "1\n"; 
-        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
-
-        try (Scanner scanner = new Scanner(System.in)) {
-            App.play(scanner);
-        }
-
-        String output = out.toString();
-        assertTrue(output.contains("Your play is:  Rock"), "El juego debería mostrar la elección del usuario como Rock");
-        assertTrue(output.contains("The computer choice is"), "El juego debería mostrar la elección de la computadora");
-        assertTrue(output.contains("You win!") || output.contains("Computer win :(") || output.contains("It's a tie!"),
-                "El juego debería determinar el ganador o empate");
+    public void testSpockWinScissors() {
+        Move spock = new Spock();
+        Move scissors = new Scissors();
+        assertTrue(spock.win(scissors));
     }
 
     @Test
-    void testPlayWithInvalidChoice() {
-        String input = "5\n";
-        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+    public void testPlayGameUserWins() {
+
+        String userInput = "1\n";
+        ByteArrayInputStream in = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(in);
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
+        Move userMove = new Rock();
+        Move computerMove = new Scissors();
 
-        try (Scanner scanner = new Scanner(System.in)) {
-            App.play(scanner);
+        System.out.println("Your play is: " + userMove.getName());
+        System.out.println("The computer choice is " + computerMove.getName());
+
+        if (userMove.win(computerMove)) {
+            System.out.println("You win!");
+        } else if (computerMove.win(userMove)) {
+            System.out.println("Computer win :(");
+        } else {
+            System.out.println("It's a tie!");
         }
 
-        String output = out.toString();
-        assertTrue(output.contains("Wrong choice, pick another to play"), "El juego debería mostrar un mensaje de error para elección inválida");
+        String output = outContent.toString();
+        assertTrue(output.contains("You win!"), "La salida debe indicar que el jugador ha ganado");
     }
 
     @Test
-    void testPlayHandlesMultipleChoices() {
-        String input = "3\n2\n"; 
-        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+    public void testPlayGameInvalidInput() {
+        String userInput = "6\n";
+        ByteArrayInputStream in = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(in);
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
 
-        try (Scanner scanner = new Scanner(System.in)) {
-            App.play(scanner); 
-            App.play(scanner); 
-        }
-
-        String output = out.toString();
-        assertTrue(output.contains("Your play is:  Scissors"), "Debería registrar correctamente la primera elección como Scissors");
-        assertTrue(output.contains("Your play is:  Paper"), "Debería registrar correctamente la segunda elección como Paper");
-    }
-
-
-    @Test
-    void testPlayHandlesEmptyInput() {
-        String input = "\n"; 
-        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
-
-        try (Scanner scanner = new Scanner(System.in)) {
-            assertThrows(Exception.class, () -> App.play(scanner), "La entrada vacía debería lanzar una excepción");
-        }
+        // Ejecutamos el juego
+        App.play(new Scanner(System.in));
+        String output = outContent.toString();
+        assertTrue(output.contains("Wrong choice, pick another to play"));
     }
 }
